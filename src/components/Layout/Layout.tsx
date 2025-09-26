@@ -1,4 +1,4 @@
-import { AppShell, Flex, Text } from '@mantine/core'
+import { AppShell, Flex, Image, Text } from '@mantine/core'
 import { type ReactNode } from 'react'
 
 interface LayoutProps {
@@ -6,13 +6,66 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
+  const leftImages = [
+    '/naruto.gif',
+    '/death.gif',
+    '/kawai.gif',
+    '/Girl.gif',
+    '/cowboy-smoke.gif',
+    '/Bleach.gif',
+    '/vampire.gif',
+  ]
+  const rightImages = [
+    '/studio.gif',
+    '/ears.gif',
+    '/One.gif',
+    '/pokemon.gif',
+    'jojo.gif',
+    'vampire2.gif',
+    'naruto2.gif',
+  ]
+
+  const renderImages = (images: string[]) =>
+    images.map((src) => (
+      <Image
+        key={src}
+        src={src}
+        width={60}
+        height={60}
+        fit="contain"
+        style={{ width: 'auto' }}
+      />
+    ))
+
   return (
     <AppShell padding="md" header={{ height: 80 }}>
       <AppShell.Header>
-        <Flex justify="center" align="center" h="80px">
-          <Text size="xl" className="pokemon-font" style={{ fontSize: '3rem' }}>
+        <Flex
+          justify="center"
+          align="center"
+          gap="sm"
+          h="80px"
+          style={{ overflow: 'hidden' }}
+        >
+          <Flex gap="sm" style={{ overflow: 'hidden', flexShrink: 1 }}>
+            {renderImages(leftImages)}
+          </Flex>
+
+          <Text
+            size="xl"
+            className="pokemon-font"
+            style={{
+              fontSize: '3rem',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+            }}
+          >
             Anime Tier
           </Text>
+
+          <Flex gap="sm" style={{ overflow: 'hidden', flexShrink: 1 }}>
+            {renderImages(rightImages)}
+          </Flex>
         </Flex>
       </AppShell.Header>
 
