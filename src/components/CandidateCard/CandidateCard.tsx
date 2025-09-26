@@ -1,6 +1,5 @@
 import { ActionIcon, Box, Group, Image, Paper, Text } from '@mantine/core'
 import { type MouseEvent, useMemo, useState } from 'react'
-import { IconList } from '../../assets/IconList.tsx'
 import { IconPlay } from '../../assets/IconPlay.tsx'
 import { useTierMaker } from '../../contexts/TierMakerContext'
 import { type Candidate } from '../../types'
@@ -22,11 +21,6 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
   const handlePlayClick = (e: MouseEvent) => {
     e.stopPropagation()
     window.open(candidate.videoUrl, '_blank')
-  }
-
-  const handleListClick = (e: MouseEvent) => {
-    e.stopPropagation()
-    openModal(candidate)
   }
 
   const handleCardClick = () => {
@@ -81,15 +75,6 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
               onClick={handlePlayClick}
             >
               <IconPlay />
-            </ActionIcon>
-            <ActionIcon
-              size="md"
-              variant="filled"
-              color="dark"
-              style={{ opacity: 0.8 }}
-              onClick={handleListClick}
-            >
-              <IconList />
             </ActionIcon>
           </Group>
         )}

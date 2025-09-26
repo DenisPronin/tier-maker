@@ -8,6 +8,7 @@ import {
   Group,
   Image,
   Modal,
+  NumberInput,
   Select,
   Stack,
   Text,
@@ -37,12 +38,32 @@ export function CandidateModal({
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     currentCategoryId ? currentCategoryId.toString() : null
   )
+  const [score, setScore] = useState<number | string>('')
 
   // Update selected category when candidate changes
   useEffect(() => {
     const categoryId = placements[candidate.id]
     setSelectedCategory(categoryId ? categoryId.toString() : null)
   }, [candidate.id, placements])
+
+  // Find matching category based on score
+  const findCategoryByScore = (scoreValue: number): string | null => {
+    const category = categories.find(
+      (cat) => scoreValue >= cat.min && scoreValue <= cat.max
+    )
+    return category ? category.id.toString() : null
+  }
+
+  // Handle score change and auto-select category
+  const handleScoreChange = (value: string | number) => {
+    setScore(value)
+    if (typeof value === 'number' && !isNaN(value)) {
+      const matchingCategory = findCategoryByScore(value)
+      if (matchingCategory) {
+        setSelectedCategory(matchingCategory)
+      }
+    }
+  }
 
   const formattedComment = useMemo(
     () => formatComment(candidate.comment),
@@ -153,6 +174,21 @@ export function CandidateModal({
                 />
               ) : null
             }
+          />
+
+          <NumberInput
+            label="Score"
+            placeholder="Enter score (0-40)"
+            value={score}
+            onChange={handleScoreChange}
+            min={0}
+            max={40}
+            mt="md"
+            styles={{
+              label: {
+                marginBottom: '8px'
+              }
+            }}
           />
         </Box>
       </Flex>
