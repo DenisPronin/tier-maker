@@ -1,20 +1,37 @@
-import { Box, Flex, Title } from '@mantine/core'
+import { Box, Flex, Title, Group, Select } from '@mantine/core'
 import { useDroppable } from '@dnd-kit/core'
 import { CandidateCard } from '../CandidateCard'
-import { useTierMaker } from '../../contexts/TierMakerContext'
+import { useTierMaker, type SortType } from '../../contexts/TierMakerContext'
 
 export function CandidatesList() {
-  const { getUnplacedCandidates } = useTierMaker()
+  const { getUnplacedCandidates, sortType, setSortType } = useTierMaker()
   const unplacedCandidates = getUnplacedCandidates()
   const { setNodeRef, isOver } = useDroppable({
     id: 'unplaced',
   })
 
+  const sortOptions = [
+    { value: 'name-asc', label: 'По имени (А-Я)' },
+    { value: 'name-desc', label: 'По имени (Я-А)' },
+    { value: 'year-asc', label: 'По году (старые)' },
+    { value: 'year-desc', label: 'По году (новые)' },
+    { value: 'random', label: 'Случайно' },
+  ]
+
   return (
     <Box mt="xl">
-      <Title order={2} mb="md">
-        Candidates ({unplacedCandidates.length})
-      </Title>
+      <Group justify="space-between" mb="md">
+        <Title order={2}>
+          Candidates ({unplacedCandidates.length})
+        </Title>
+        <Select
+          data={sortOptions}
+          value={sortType}
+          onChange={(value) => setSortType(value as SortType)}
+          w={180}
+          size="sm"
+        />
+      </Group>
       <Box
         ref={setNodeRef}
         style={{

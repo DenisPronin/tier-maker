@@ -10,9 +10,18 @@ import { categories as defaultCategories } from '../data/categories'
 import { type Candidate, type Category } from '../types'
 import { loadFromStorage, saveToStorage } from '../utils/localStorage'
 
+export type SortType =
+  | 'name-asc'
+  | 'name-desc'
+  | 'year-asc'
+  | 'year-desc'
+  | 'random'
+
 interface TierMakerContextType {
   categories: Category[]
   placements: Record<number, number[]>
+  sortType: SortType
+  setSortType: (sortType: SortType) => void
   placeCandidate: (
     candidateId: number,
     categoryId: number,
@@ -51,6 +60,8 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(
     null
   )
+  const [sortType, setSortType] = useState<SortType>('name-asc')
+  const [randomSeed] = useState<number>(Math.random())
 
   // Auto-save to localStorage when data changes
   useEffect(() => {
@@ -126,7 +137,35 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
 
   const getUnplacedCandidates = (): Candidate[] => {
     const placedIds = new Set(Object.values(placements).flat())
-    return animeList.filter((candidate) => !placedIds.has(candidate.id))
+    const unplaced = animeList.filter(
+      (candidate) => !placedIds.has(candidate.id)
+    )
+
+    return sortCandidates(unplaced, sortType)
+  }
+
+  const sortCandidates = (
+    candidates: Candidate[],
+    type: SortType
+  ): Candidate[] => {
+    switch (type) {
+      case 'name-asc':
+        return [...candidates].sort((a, b) => a.name.localeCompare(b.name))
+      case 'name-desc':
+        return [...candidates].sort((a, b) => b.name.localeCompare(a.name))
+      case 'year-asc':
+        return [...candidates].sort((a, b) => a.year - b.year)
+      case 'year-desc':
+        return [...candidates].sort((a, b) => b.year - a.year)
+      case 'random':
+        return [...candidates].sort((a, b) => {
+          const seedA = (a.id * randomSeed) % 1
+          const seedB = (b.id * randomSeed) % 1
+          return seedA - seedB
+        })
+      default:
+        return candidates
+    }
   }
 
   const openModal = (candidate: Candidate) => {
@@ -140,6 +179,8 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
   const value: TierMakerContextType = {
     categories,
     placements,
+    sortType,
+    setSortType,
     placeCandidate,
     removeCandidate,
     reorderInCategory,
