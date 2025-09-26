@@ -851,7 +851,8 @@ export const animeList: Candidate[] = [
     year: 2005,
     videoUrl: 'https://site.yummyani.me/catalog/item/krov-triedinstva',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx27-MOAaiBHHLfOY.png',
   },
   {
     id: 91,
@@ -860,7 +861,8 @@ export const animeList: Candidate[] = [
     videoUrl:
       'https://www.youtube.com/watch?v=6-vSBm8zdQI&list=RD6-vSBm8zdQI&start_radio=1',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx3457-owSEHJYvflx5.jpg',
   },
   {
     id: 92,
@@ -868,7 +870,8 @@ export const animeList: Candidate[] = [
     year: 2019,
     videoUrl: 'https://www.youtube.com/watch?v=l5wAdQ-UkWY',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx101348-2fhDFPCuMNiz.jpg',
   },
   {
     id: 93,
@@ -877,7 +880,8 @@ export const animeList: Candidate[] = [
     videoUrl:
       'https://www.youtube.com/watch?v=VsP6EIIcaLY&list=RDVsP6EIIcaLY&start_radio=1',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx7-6uh1fPvbgS9t.png',
   },
   {
     id: 94,
@@ -886,7 +890,8 @@ export const animeList: Candidate[] = [
     videoUrl:
       'https://www.youtube.com/watch?v=A60mDhxHw5Q&list=RDA60mDhxHw5Q&start_radio=1',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202-w2OLL3j8WmDm.jpg',
   },
   {
     id: 95,
@@ -895,7 +900,8 @@ export const animeList: Candidate[] = [
     videoUrl:
       'https://www.youtube.com/watch?v=TyqDOOpJlcA&list=RDTyqDOOpJlcA&start_radio=1',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx141774-iteNFzPq2oGw.jpg',
   },
   {
     id: 96,
@@ -904,7 +910,8 @@ export const animeList: Candidate[] = [
     videoUrl:
       'https://www.youtube.com/watch?v=Wn0X8EknnEc&list=RDWn0X8EknnEc&start_radio=1',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1264-sIhmsUTxzL3h.jpg',
   },
   {
     id: 97,
@@ -913,7 +920,8 @@ export const animeList: Candidate[] = [
     videoUrl:
       'https://www.youtube.com/watch?v=fWRPihlt2ho&list=RDfWRPihlt2ho&start_radio=1',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/21039-X68Dgfa7VG2v.jpg',
   },
   {
     id: 98,
@@ -922,7 +930,8 @@ export const animeList: Candidate[] = [
     videoUrl:
       'https://www.youtube.com/watch?v=6bGivPNjbrw&list=RD6bGivPNjbrw&start_radio=1',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21709-aqPBDxJPruYR.png',
   },
   {
     id: 99,
@@ -930,6 +939,7 @@ export const animeList: Candidate[] = [
     year: 2023,
     videoUrl: 'https://www.youtube.com/watch?v=Tt4_enX63K0',
     comment: 'Opening 1',
-    previewUrl: '',
+    previewUrl:
+      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx159831-cJUNqCqzuApc.png',
   },
 ]
