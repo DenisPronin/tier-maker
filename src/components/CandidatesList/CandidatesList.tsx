@@ -13,7 +13,7 @@ export function CandidatesList() {
   return (
     <Box mt="xl">
       <Title order={2} mb="md">
-        Candidates
+        Candidates ({unplacedCandidates.length})
       </Title>
       <Box
         ref={setNodeRef}
