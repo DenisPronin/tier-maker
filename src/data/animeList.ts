@@ -462,7 +462,7 @@ export const animeList: Candidate[] = [
     name: "Jojo's Bizarre Adventures",
     year: 2022,
     videoUrl: 'https://www.youtube.com/watch?v=qDQBIKPsy2I',
-    comment: 'Opening Stone Ocean',
+    comment: 'Opening 1',
     previewUrl:
       'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx146722-hiZU7M33fBhn.jpg',
   },
