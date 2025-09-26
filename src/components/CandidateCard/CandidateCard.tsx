@@ -1,5 +1,5 @@
 import { ActionIcon, Box, Group, Image, Paper, Text } from '@mantine/core'
-import { useMemo, useState } from 'react'
+import { type MouseEvent, useMemo, useState } from 'react'
 import { IconList } from '../../assets/IconList.tsx'
 import { IconPlay } from '../../assets/IconPlay.tsx'
 import { type Candidate } from '../../types'
@@ -15,6 +15,11 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
     () => candidate.comment.replace(/Opening/gi, 'OP'),
     [candidate.comment]
   )
+
+  const handlePlayClick = (e: MouseEvent) => {
+    e.stopPropagation()
+    window.open(candidate.videoUrl, '_blank')
+  }
 
   return (
     <Paper
@@ -60,6 +65,7 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
               variant="filled"
               color="dark"
               style={{ opacity: 0.8 }}
+              onClick={handlePlayClick}
             >
               <IconPlay />
             </ActionIcon>
