@@ -1,12 +1,29 @@
-import { createContext, type ReactNode, useContext, useState } from 'react'
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { animeList } from '../data/animeList'
-import { type Candidate } from '../types'
+import { categories as defaultCategories } from '../data/categories'
+import { type Candidate, type Category } from '../types'
+import { loadFromStorage, saveToStorage } from '../utils/localStorage'
 
 interface TierMakerContextType {
+  categories: Category[]
   placements: Record<number, number[]>
-  placeCandidate: (candidateId: number, categoryId: number, index?: number) => void
+  placeCandidate: (
+    candidateId: number,
+    categoryId: number,
+    index?: number
+  ) => void
   removeCandidate: (candidateId: number) => void
-  reorderInCategory: (categoryId: number, fromIndex: number, toIndex: number) => void
+  reorderInCategory: (
+    categoryId: number,
+    fromIndex: number,
+    toIndex: number
+  ) => void
   getCandidatesInCategory: (categoryId: number) => Candidate[]
   getUnplacedCandidates: () => Candidate[]
   openModal: (candidate: Candidate) => void
@@ -17,18 +34,42 @@ interface TierMakerContextType {
 const TierMakerContext = createContext<TierMakerContextType | null>(null)
 
 export function TierMakerProvider({ children }: { children: ReactNode }) {
-  // placements: { [categoryId]: candidateId[] }
-  const [placements, setPlacements] = useState<Record<number, number[]>>({})
-  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null)
+  // Load initial data from localStorage or use defaults
+  const initializeData = () => {
+    const saved = loadFromStorage()
+    return {
+      categories: saved?.categories || defaultCategories,
+      placements: saved?.placements || {},
+    }
+  }
 
-  const placeCandidate = (candidateId: number, categoryId: number, index?: number) => {
+  const initialData = initializeData()
+  const [categories] = useState<Category[]>(initialData.categories)
+  const [placements, setPlacements] = useState<Record<number, number[]>>(
+    initialData.placements
+  )
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(
+    null
+  )
+
+  // Auto-save to localStorage when data changes
+  useEffect(() => {
+    saveToStorage({ categories, placements })
+  }, [categories, placements])
+
+  const placeCandidate = (
+    candidateId: number,
+    categoryId: number,
+    index?: number
+  ) => {
     setPlacements((prev) => {
       const newPlacements = { ...prev }
 
       // Remove candidate from any existing category
-      Object.keys(newPlacements).forEach(catId => {
+      Object.keys(newPlacements).forEach((catId) => {
         const catIdNum = parseInt(catId)
-        newPlacements[catIdNum] = newPlacements[catIdNum]?.filter(id => id !== candidateId) || []
+        newPlacements[catIdNum] =
+          newPlacements[catIdNum]?.filter((id) => id !== candidateId) || []
       })
 
       // Add to new category
@@ -49,15 +90,20 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
   const removeCandidate = (candidateId: number) => {
     setPlacements((prev) => {
       const newPlacements = { ...prev }
-      Object.keys(newPlacements).forEach(catId => {
+      Object.keys(newPlacements).forEach((catId) => {
         const catIdNum = parseInt(catId)
-        newPlacements[catIdNum] = newPlacements[catIdNum]?.filter(id => id !== candidateId) || []
+        newPlacements[catIdNum] =
+          newPlacements[catIdNum]?.filter((id) => id !== candidateId) || []
       })
       return newPlacements
     })
   }
 
-  const reorderInCategory = (categoryId: number, fromIndex: number, toIndex: number) => {
+  const reorderInCategory = (
+    categoryId: number,
+    fromIndex: number,
+    toIndex: number
+  ) => {
     setPlacements((prev) => {
       const newPlacements = { ...prev }
       if (!newPlacements[categoryId]) return prev
@@ -73,14 +119,14 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
 
   const getCandidatesInCategory = (categoryId: number): Candidate[] => {
     const candidateIds = placements[categoryId] || []
-    return candidateIds.map(id => animeList.find(candidate => candidate.id === id)).filter(Boolean) as Candidate[]
+    return candidateIds
+      .map((id) => animeList.find((candidate) => candidate.id === id))
+      .filter(Boolean) as Candidate[]
   }
 
   const getUnplacedCandidates = (): Candidate[] => {
-    const placedIds = new Set(
-      Object.values(placements).flat()
-    )
-    return animeList.filter(candidate => !placedIds.has(candidate.id))
+    const placedIds = new Set(Object.values(placements).flat())
+    return animeList.filter((candidate) => !placedIds.has(candidate.id))
   }
 
   const openModal = (candidate: Candidate) => {
@@ -92,6 +138,7 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
   }
 
   const value: TierMakerContextType = {
+    categories,
     placements,
     placeCandidate,
     removeCandidate,

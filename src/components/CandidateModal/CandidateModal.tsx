@@ -15,7 +15,6 @@ import {
 } from '@mantine/core'
 import { useEffect, useMemo, useState } from 'react'
 import { IconPlay } from '../../assets/IconPlay'
-import { categories } from '../../data/categories'
 import { useTierMaker } from '../../contexts/TierMakerContext'
 import { type Candidate } from '../../types'
 import { formatComment } from '../../utils/formatComment'
@@ -31,10 +30,19 @@ export function CandidateModal({
   opened,
   onClose,
 }: CandidateModalProps) {
-  const { placeCandidate, placements } = useTierMaker()
+  const { categories, placeCandidate, placements } = useTierMaker()
 
-  // Get current candidate category or null
-  const currentCategoryId = placements[candidate.id]
+  // Find current candidate category
+  const getCurrentCategoryId = (): number | null => {
+    for (const [categoryId, candidateIds] of Object.entries(placements)) {
+      if (candidateIds.includes(candidate.id)) {
+        return parseInt(categoryId)
+      }
+    }
+    return null
+  }
+
+  const currentCategoryId = getCurrentCategoryId()
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     currentCategoryId ? currentCategoryId.toString() : null
   )
@@ -42,7 +50,7 @@ export function CandidateModal({
 
   // Update selected category when candidate changes
   useEffect(() => {
-    const categoryId = placements[candidate.id]
+    const categoryId = getCurrentCategoryId()
     setSelectedCategory(categoryId ? categoryId.toString() : null)
   }, [candidate.id, placements])
 
