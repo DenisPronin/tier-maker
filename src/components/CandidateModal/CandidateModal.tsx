@@ -1,6 +1,20 @@
-import { ActionIcon, Box, Flex, FocusTrap, Image, Modal, Stack, Text } from '@mantine/core'
-import { useMemo } from 'react'
+import {
+  ActionIcon,
+  Box,
+  Button,
+  type ComboboxItem,
+  Flex,
+  FocusTrap,
+  Group,
+  Image,
+  Modal,
+  Select,
+  Stack,
+  Text,
+} from '@mantine/core'
+import { useMemo, useState } from 'react'
 import { IconPlay } from '../../assets/IconPlay'
+import { categories } from '../../data/categories'
 import { type Candidate } from '../../types'
 import { formatComment } from '../../utils/formatComment'
 
@@ -15,13 +29,48 @@ export function CandidateModal({
   opened,
   onClose,
 }: CandidateModalProps) {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
   const formattedComment = useMemo(
     () => formatComment(candidate.comment),
     [candidate.comment]
   )
 
+  const categoryOptions = categories.map((category) => ({
+    value: category.id.toString(),
+    label: category.name,
+    color: category.color,
+  }))
+
+  const renderOption = ({ option }: { option: ComboboxItem }) => {
+    const category = categories.find(
+      (cat) => cat.id.toString() === option.value
+    )
+    return (
+      <Group gap="xs">
+        <Box
+          style={{
+            width: 12,
+            height: 12,
+            backgroundColor: category?.color,
+            borderRadius: 2,
+          }}
+        />
+        <Text>{option.label}</Text>
+      </Group>
+    )
+  }
+
   const handlePlayClick = () => {
     window.open(candidate.videoUrl, '_blank')
+  }
+
+  const handleConfirm = () => {
+    if (selectedCategory) {
+      // TODO: Handle category assignment
+      console.log('Assign to category:', selectedCategory)
+      onClose()
+    }
   }
 
   return (
@@ -65,8 +114,28 @@ export function CandidateModal({
             <IconPlay />
           </ActionIcon>
         </Box>
-        <Box>test</Box>
+        <Box style={{ flex: 1 }}>
+          <Select
+            label="Select Category"
+            placeholder="Choose a category"
+            data={categoryOptions}
+            value={selectedCategory}
+            onChange={setSelectedCategory}
+            renderOption={renderOption}
+          />
+        </Box>
       </Flex>
+
+      <Group justify="flex-end" mt="md">
+        <Button
+          variant="filled"
+          color="blue"
+          disabled={!selectedCategory}
+          onClick={handleConfirm}
+        >
+          Confirm
+        </Button>
+      </Group>
     </Modal>
   )
 }
