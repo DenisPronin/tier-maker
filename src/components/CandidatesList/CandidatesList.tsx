@@ -1,15 +1,18 @@
 import { Box, Flex, Title } from '@mantine/core'
 import { CandidateCard } from '../CandidateCard'
-import { animeList } from '../../data/animeList'
+import { useTierMaker } from '../../contexts/TierMakerContext'
 
 export function CandidatesList() {
+  const { getUnplacedCandidates } = useTierMaker()
+  const unplacedCandidates = getUnplacedCandidates()
+
   return (
     <Box mt="xl">
       <Title order={2} mb="md">
         Candidates
       </Title>
       <Flex wrap="wrap" gap="16px">
-        {animeList.map((anime) => (
+        {unplacedCandidates.map((anime) => (
           <CandidateCard key={anime.id} candidate={anime} />
         ))}
       </Flex>

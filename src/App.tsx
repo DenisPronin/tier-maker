@@ -1,13 +1,16 @@
 import { Layout } from './components/Layout'
 import { CategoriesList } from './components/CategoriesList'
 import { CandidatesList } from './components/CandidatesList'
+import { TierMakerProvider } from './contexts/TierMakerContext'
 
 function App() {
   return (
-    <Layout>
-      <CategoriesList />
-      <CandidatesList />
-    </Layout>
+    <TierMakerProvider>
+      <Layout>
+        <CategoriesList />
+        <CandidatesList />
+      </Layout>
+    </TierMakerProvider>
   )
 }
 
