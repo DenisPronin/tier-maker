@@ -3,9 +3,10 @@ import { animeList } from '../data/animeList'
 import { type Candidate } from '../types'
 
 interface TierMakerContextType {
-  placements: Record<number, number>
-  placeCandidate: (candidateId: number, categoryId: number) => void
+  placements: Record<number, number[]>
+  placeCandidate: (candidateId: number, categoryId: number, index?: number) => void
   removeCandidate: (candidateId: number) => void
+  reorderInCategory: (categoryId: number, fromIndex: number, toIndex: number) => void
   getCandidatesInCategory: (categoryId: number) => Candidate[]
   getUnplacedCandidates: () => Candidate[]
   openModal: (candidate: Candidate) => void
@@ -16,29 +17,70 @@ interface TierMakerContextType {
 const TierMakerContext = createContext<TierMakerContextType | null>(null)
 
 export function TierMakerProvider({ children }: { children: ReactNode }) {
-  // placements: { [candidateId]: categoryId }
-  const [placements, setPlacements] = useState<Record<number, number>>({})
+  // placements: { [categoryId]: candidateId[] }
+  const [placements, setPlacements] = useState<Record<number, number[]>>({})
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null)
 
-  const placeCandidate = (candidateId: number, categoryId: number) => {
-    setPlacements((prev) => ({ ...prev, [candidateId]: categoryId }))
+  const placeCandidate = (candidateId: number, categoryId: number, index?: number) => {
+    setPlacements((prev) => {
+      const newPlacements = { ...prev }
+
+      // Remove candidate from any existing category
+      Object.keys(newPlacements).forEach(catId => {
+        const catIdNum = parseInt(catId)
+        newPlacements[catIdNum] = newPlacements[catIdNum]?.filter(id => id !== candidateId) || []
+      })
+
+      // Add to new category
+      if (!newPlacements[categoryId]) {
+        newPlacements[categoryId] = []
+      }
+
+      if (index !== undefined) {
+        newPlacements[categoryId].splice(index, 0, candidateId)
+      } else {
+        newPlacements[categoryId].push(candidateId)
+      }
+
+      return newPlacements
+    })
   }
 
   const removeCandidate = (candidateId: number) => {
     setPlacements((prev) => {
-      const { [candidateId]: removed, ...rest } = prev
-      return rest
+      const newPlacements = { ...prev }
+      Object.keys(newPlacements).forEach(catId => {
+        const catIdNum = parseInt(catId)
+        newPlacements[catIdNum] = newPlacements[catIdNum]?.filter(id => id !== candidateId) || []
+      })
+      return newPlacements
+    })
+  }
+
+  const reorderInCategory = (categoryId: number, fromIndex: number, toIndex: number) => {
+    setPlacements((prev) => {
+      const newPlacements = { ...prev }
+      if (!newPlacements[categoryId]) return prev
+
+      const categoryItems = [...newPlacements[categoryId]]
+      const [movedItem] = categoryItems.splice(fromIndex, 1)
+      categoryItems.splice(toIndex, 0, movedItem)
+
+      newPlacements[categoryId] = categoryItems
+      return newPlacements
     })
   }
 
   const getCandidatesInCategory = (categoryId: number): Candidate[] => {
-    return animeList.filter(
-      (candidate) => placements[candidate.id] === categoryId
-    )
+    const candidateIds = placements[categoryId] || []
+    return candidateIds.map(id => animeList.find(candidate => candidate.id === id)).filter(Boolean) as Candidate[]
   }
 
   const getUnplacedCandidates = (): Candidate[] => {
-    return animeList.filter((candidate) => !(candidate.id in placements))
+    const placedIds = new Set(
+      Object.values(placements).flat()
+    )
+    return animeList.filter(candidate => !placedIds.has(candidate.id))
   }
 
   const openModal = (candidate: Candidate) => {
@@ -53,6 +95,7 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
     placements,
     placeCandidate,
     removeCandidate,
+    reorderInCategory,
     getCandidatesInCategory,
     getUnplacedCandidates,
     openModal,
