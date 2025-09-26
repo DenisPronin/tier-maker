@@ -7,22 +7,24 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const leftImages = [
+    '/dance.gif',
     '/naruto.gif',
     '/death.gif',
     '/kawai.gif',
     '/Girl.gif',
     '/cowboy-smoke.gif',
     '/Bleach.gif',
-    '/vampire.gif',
+    '/studio.gif',
   ]
   const rightImages = [
-    '/studio.gif',
+    '/vampire.gif',
     '/ears.gif',
     '/One.gif',
     '/pokemon.gif',
     'jojo.gif',
     'vampire2.gif',
     'naruto2.gif',
+    'goodbye.gif',
   ]
 
   const renderImages = (images: string[]) =>
