@@ -1,9 +1,10 @@
 import { Layout } from './components/Layout'
+import { CategoriesList } from './components/CategoriesList'
 
 function App() {
   return (
     <Layout>
-      <div>test</div>
+      <CategoriesList />
     </Layout>
   )
 }
