@@ -2,16 +2,17 @@ import { ActionIcon, Box, Group, Image, Paper, Text } from '@mantine/core'
 import { type MouseEvent, useMemo, useState } from 'react'
 import { IconList } from '../../assets/IconList.tsx'
 import { IconPlay } from '../../assets/IconPlay.tsx'
+import { useTierMaker } from '../../contexts/TierMakerContext'
 import { type Candidate } from '../../types'
 import { formatComment } from '../../utils/formatComment'
 
 interface CandidateCardProps {
   candidate: Candidate
-  onOpenModal?: (candidate: Candidate) => void
 }
 
-export function CandidateCard({ candidate, onOpenModal }: CandidateCardProps) {
+export function CandidateCard({ candidate }: CandidateCardProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const { openModal } = useTierMaker()
 
   const formattedComment = useMemo(
     () => formatComment(candidate.comment),
@@ -25,11 +26,11 @@ export function CandidateCard({ candidate, onOpenModal }: CandidateCardProps) {
 
   const handleListClick = (e: MouseEvent) => {
     e.stopPropagation()
-    onOpenModal?.(candidate)
+    openModal(candidate)
   }
 
   const handleCardClick = () => {
-    onOpenModal?.(candidate)
+    openModal(candidate)
   }
 
   return (

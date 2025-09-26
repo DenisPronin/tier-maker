@@ -8,12 +8,17 @@ interface TierMakerContextType {
   removeCandidate: (candidateId: number) => void
   getCandidatesInCategory: (categoryId: number) => Candidate[]
   getUnplacedCandidates: () => Candidate[]
+  openModal: (candidate: Candidate) => void
+  closeModal: () => void
+  selectedCandidate: Candidate | null
 }
 
 const TierMakerContext = createContext<TierMakerContextType | null>(null)
 
 export function TierMakerProvider({ children }: { children: ReactNode }) {
+  // placements: { [candidateId]: categoryId }
   const [placements, setPlacements] = useState<Record<number, number>>({})
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null)
 
   const placeCandidate = (candidateId: number, categoryId: number) => {
     setPlacements((prev) => ({ ...prev, [candidateId]: categoryId }))
@@ -36,12 +41,23 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
     return animeList.filter((candidate) => !(candidate.id in placements))
   }
 
+  const openModal = (candidate: Candidate) => {
+    setSelectedCandidate(candidate)
+  }
+
+  const closeModal = () => {
+    setSelectedCandidate(null)
+  }
+
   const value: TierMakerContextType = {
     placements,
     placeCandidate,
     removeCandidate,
     getCandidatesInCategory,
     getUnplacedCandidates,
+    openModal,
+    closeModal,
+    selectedCandidate,
   }
 
   return (

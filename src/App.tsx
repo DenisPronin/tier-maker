@@ -1,15 +1,10 @@
-import { Layout } from './components/Layout'
-import { CategoriesList } from './components/CategoriesList'
-import { CandidatesList } from './components/CandidatesList'
+import { AppContent } from './components/AppContent'
 import { TierMakerProvider } from './contexts/TierMakerContext'
 
 function App() {
   return (
     <TierMakerProvider>
-      <Layout>
-        <CategoriesList />
-        <CandidatesList />
-      </Layout>
+      <AppContent />
     </TierMakerProvider>
   )
 }

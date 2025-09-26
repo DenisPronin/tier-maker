@@ -15,6 +15,7 @@ import {
 import { useMemo, useState } from 'react'
 import { IconPlay } from '../../assets/IconPlay'
 import { categories } from '../../data/categories'
+import { useTierMaker } from '../../contexts/TierMakerContext'
 import { type Candidate } from '../../types'
 import { formatComment } from '../../utils/formatComment'
 
@@ -30,6 +31,7 @@ export function CandidateModal({
   onClose,
 }: CandidateModalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const { placeCandidate } = useTierMaker()
 
   const formattedComment = useMemo(
     () => formatComment(candidate.comment),
@@ -67,8 +69,7 @@ export function CandidateModal({
 
   const handleConfirm = () => {
     if (selectedCategory) {
-      // TODO: Handle category assignment
-      console.log('Assign to category:', selectedCategory)
+      placeCandidate(candidate.id, parseInt(selectedCategory))
       onClose()
     }
   }

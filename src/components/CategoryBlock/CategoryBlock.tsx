@@ -1,4 +1,6 @@
 import { Box, Flex, Paper } from '@mantine/core'
+import { CandidateCard } from '../CandidateCard'
+import { useTierMaker } from '../../contexts/TierMakerContext'
 import { type Category } from '../../types'
 
 interface CategoryBlockProps {
@@ -6,6 +8,9 @@ interface CategoryBlockProps {
 }
 
 export function CategoryBlock({ category }: CategoryBlockProps) {
+  const { getCandidatesInCategory } = useTierMaker()
+  const candidatesInCategory = getCandidatesInCategory(category.id)
+
   return (
     <Paper shadow="sm" radius="md" withBorder style={{ overflow: 'hidden' }}>
       <Flex>
@@ -30,10 +35,17 @@ export function CategoryBlock({ category }: CategoryBlockProps) {
             minHeight: '100px',
             padding: '16px',
             backgroundColor: 'var(--mantine-color-dark-7)',
-            border: '2px dashed var(--mantine-color-dark-4)',
+            border: candidatesInCategory.length === 0 ? '2px dashed var(--mantine-color-dark-4)' : 'none',
           }}
         >
-          {/* Empty container for items */}
+          <Flex wrap="wrap" gap="8px">
+            {candidatesInCategory.map((candidate) => (
+              <CandidateCard
+                key={candidate.id}
+                candidate={candidate}
+              />
+            ))}
+          </Flex>
         </Box>
       </Flex>
     </Paper>
