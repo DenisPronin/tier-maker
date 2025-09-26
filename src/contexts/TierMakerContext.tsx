@@ -61,7 +61,14 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
     null
   )
   const [sortType, setSortType] = useState<SortType>('name-asc')
-  const [randomSeed] = useState<number>(Math.random())
+  const [randomSeed, setRandomSeed] = useState<number>(Math.random())
+
+  const handleSetSortType = (newSortType: SortType) => {
+    setSortType(newSortType)
+    if (newSortType === 'random') {
+      setRandomSeed(Math.random())
+    }
+  }
 
   // Auto-save to localStorage when data changes
   useEffect(() => {
@@ -180,7 +187,7 @@ export function TierMakerProvider({ children }: { children: ReactNode }) {
     categories,
     placements,
     sortType,
-    setSortType,
+    setSortType: handleSetSortType,
     placeCandidate,
     removeCandidate,
     reorderInCategory,
