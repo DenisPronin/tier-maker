@@ -1,4 +1,4 @@
-import { AppShell, Flex, Image, Text } from '@mantine/core'
+import { AppShell, Box, Flex, Image, Text } from '@mantine/core'
 import { type ReactNode } from 'react'
 
 interface LayoutProps {
@@ -38,14 +38,15 @@ export function Layout({ children }: LayoutProps) {
     ))
 
   return (
-    <AppShell padding="md" header={{ height: 80 }}>
-      <AppShell.Header>
+    <AppShell>
+      <AppShell.Main>
         <Flex
           justify="center"
           align="center"
           gap="sm"
           h="80px"
           style={{ overflow: 'hidden' }}
+          mb="md"
         >
           <Flex gap="sm" style={{ overflow: 'hidden', flexShrink: 1 }}>
             {renderImages(leftImages)}
@@ -67,9 +68,9 @@ export function Layout({ children }: LayoutProps) {
             {renderImages(rightImages)}
           </Flex>
         </Flex>
-      </AppShell.Header>
 
-      <AppShell.Main>{children}</AppShell.Main>
+        <Box p="md">{children}</Box>
+      </AppShell.Main>
     </AppShell>
   )
 }
