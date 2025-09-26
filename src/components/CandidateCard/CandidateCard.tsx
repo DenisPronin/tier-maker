@@ -3,22 +3,33 @@ import { type MouseEvent, useMemo, useState } from 'react'
 import { IconList } from '../../assets/IconList.tsx'
 import { IconPlay } from '../../assets/IconPlay.tsx'
 import { type Candidate } from '../../types'
+import { formatComment } from '../../utils/formatComment'
 
 interface CandidateCardProps {
   candidate: Candidate
+  onOpenModal?: (candidate: Candidate) => void
 }
 
-export function CandidateCard({ candidate }: CandidateCardProps) {
+export function CandidateCard({ candidate, onOpenModal }: CandidateCardProps) {
   const [isHovered, setIsHovered] = useState(false)
 
   const formattedComment = useMemo(
-    () => candidate.comment.replace(/Opening/gi, 'OP'),
+    () => formatComment(candidate.comment),
     [candidate.comment]
   )
 
   const handlePlayClick = (e: MouseEvent) => {
     e.stopPropagation()
     window.open(candidate.videoUrl, '_blank')
+  }
+
+  const handleListClick = (e: MouseEvent) => {
+    e.stopPropagation()
+    onOpenModal?.(candidate)
+  }
+
+  const handleCardClick = () => {
+    onOpenModal?.(candidate)
   }
 
   return (
@@ -40,6 +51,7 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
         e.currentTarget.style.transform = 'scale(1)'
         setIsHovered(false)
       }}
+      onClick={handleCardClick}
     >
       <Box style={{ position: 'relative' }}>
         <Image
@@ -74,6 +86,7 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
               variant="filled"
               color="dark"
               style={{ opacity: 0.8 }}
+              onClick={handleListClick}
             >
               <IconList />
             </ActionIcon>
