@@ -12,7 +12,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { IconPlay } from '../../assets/IconPlay'
 import { categories } from '../../data/categories'
 import { useTierMaker } from '../../contexts/TierMakerContext'
@@ -30,8 +30,19 @@ export function CandidateModal({
   opened,
   onClose,
 }: CandidateModalProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const { placeCandidate } = useTierMaker()
+  const { placeCandidate, placements } = useTierMaker()
+
+  // Get current candidate category or null
+  const currentCategoryId = placements[candidate.id]
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    currentCategoryId ? currentCategoryId.toString() : null
+  )
+
+  // Update selected category when candidate changes
+  useEffect(() => {
+    const categoryId = placements[candidate.id]
+    setSelectedCategory(categoryId ? categoryId.toString() : null)
+  }, [candidate.id, placements])
 
   const formattedComment = useMemo(
     () => formatComment(candidate.comment),
