@@ -49,6 +49,7 @@ export function CategoryBlock({ category }: CategoryBlockProps) {
               <CandidateCard
                 key={candidate.id}
                 candidate={candidate}
+                size="small"
               />
             ))}
           </Flex>

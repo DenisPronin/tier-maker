@@ -1,5 +1,5 @@
-import { ActionIcon, Box, Group, Image, Paper, Text } from '@mantine/core'
 import { useDraggable } from '@dnd-kit/core'
+import { ActionIcon, Box, Group, Image, Paper, Text } from '@mantine/core'
 import { type MouseEvent, useMemo, useState } from 'react'
 import { IconPlay } from '../../assets/IconPlay.tsx'
 import { useTierMaker } from '../../contexts/TierMakerContext'
@@ -8,14 +8,23 @@ import { formatComment } from '../../utils/formatComment'
 
 interface CandidateCardProps {
   candidate: Candidate
+  size?: 'normal' | 'small'
 }
 
-export function CandidateCard({ candidate }: CandidateCardProps) {
+export function CandidateCard({
+  candidate,
+  size = 'normal',
+}: CandidateCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const { openModal } = useTierMaker()
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: candidate.id.toString(),
-  })
+
+  const isSmall = size === 'small'
+  const cardWidth = isSmall ? 100 : 120
+  const cardHeight = isSmall ? 133 : 160
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: candidate.id.toString(),
+    })
 
   const formattedComment = useMemo(
     () => formatComment(candidate.comment),
@@ -35,9 +44,11 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
     }
   }
 
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  } : undefined
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined
 
   return (
     <Paper
@@ -46,7 +57,7 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
       radius="md"
       withBorder
       style={{
-        width: '120px',
+        width: `${cardWidth}px`,
         cursor: isDragging ? 'grabbing' : 'pointer',
         transition: isDragging ? 'none' : 'transform 0.2s ease',
         position: 'relative',
@@ -73,11 +84,11 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
           {...attributes}
           src={candidate.previewUrl}
           alt={candidate.name}
-          width={120}
-          height={160}
+          width={cardWidth}
+          height={cardHeight}
           fit="cover"
           radius="md"
-          fallbackSrc="https://via.placeholder.com/120x160?text=No+Image"
+          fallbackSrc={`https://via.placeholder.com/${cardWidth}x${cardHeight}?text=No+Image`}
           style={{
             cursor: isDragging ? 'grabbing' : 'grab',
           }}
@@ -92,7 +103,7 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
             }}
           >
             <ActionIcon
-              size="md"
+              size={isSmall ? 'sm' : 'md'}
               variant="filled"
               color="dark"
               style={{
