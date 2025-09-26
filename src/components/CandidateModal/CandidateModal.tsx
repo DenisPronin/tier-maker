@@ -100,7 +100,7 @@ export function CandidateModal({
             fallbackSrc="https://via.placeholder.com/120x160?text=No+Image"
           />
           <ActionIcon
-            size="md"
+            size="lg"
             variant="filled"
             color="dark"
             style={{
@@ -122,6 +122,25 @@ export function CandidateModal({
             value={selectedCategory}
             onChange={setSelectedCategory}
             renderOption={renderOption}
+            styles={{
+              label: {
+                marginBottom: '8px'
+              }
+            }}
+            leftSection={
+              selectedCategory ? (
+                <Box
+                  style={{
+                    width: 12,
+                    height: 12,
+                    backgroundColor: categories.find(
+                      (cat) => cat.id.toString() === selectedCategory
+                    )?.color,
+                    borderRadius: 2,
+                  }}
+                />
+              ) : null
+            }
           />
         </Box>
       </Flex>
