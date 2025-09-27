@@ -49,6 +49,7 @@ export function Layout({ children }: LayoutProps) {
           h="80px"
           style={{ overflow: 'hidden' }}
           mb="md"
+          mt="md"
         >
           <Flex gap="sm" style={{ overflow: 'hidden', flexShrink: 1 }}>
             {renderImages(leftImages)}
