@@ -62,6 +62,10 @@ export function Layout({ children }: LayoutProps) {
               fontSize: '3rem',
               whiteSpace: 'nowrap',
               flexShrink: 0,
+              background: 'linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #00ff00, #0080ff, #8000ff, #ff0080)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
             }}
           >
             Anime Tier
